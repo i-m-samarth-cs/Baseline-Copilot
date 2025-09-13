@@ -1,0 +1,148 @@
+{
+  "name": "baseline-copilot",
+  "displayName": "Baseline Copilot",
+  "description": "Real-time browser compatibility analysis for modern web features",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "baseline",
+    "browser-compatibility",
+    "web-features",
+    "javascript",
+    "css",
+    "html"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:css",
+    "onLanguage:html",
+    "onLanguage:jsx",
+    "onLanguage:tsx"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "baselineCopilot.analyzeFile",
+        "title": "Analyze Current File",
+        "category": "Baseline Copilot"
+      },
+      {
+        "command": "baselineCopilot.analyzeWorkspace",
+        "title": "Analyze Entire Workspace",
+        "category": "Baseline Copilot"
+      },
+      {
+        "command": "baselineCopilot.generateReport",
+        "title": "Generate Compatibility Report",
+        "category": "Baseline Copilot"
+      },
+      {
+        "command": "baselineCopilot.showPanel",
+        "title": "Show Baseline Panel",
+        "category": "Baseline Copilot"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "baselineCopilot.analyzeFile",
+          "when": "resourceExtname =~ /\\.(js|ts|jsx|tsx|css|html)$/",
+          "group": "baseline"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "baselineCopilot.analyzeWorkspace",
+          "when": "explorerResourceIsFolder",
+          "group": "baseline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Baseline Copilot",
+      "properties": {
+        "baselineCopilot.enableRealTimeAnalysis": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time analysis while typing"
+        },
+        "baselineCopilot.showInlineHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline compatibility hints in the editor"
+        },
+        "baselineCopilot.targetBrowsers": {
+          "type": "array",
+          "default": ["chrome", "firefox", "safari", "edge"],
+          "description": "Target browsers for compatibility analysis"
+        },
+        "baselineCopilot.riskTolerance": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "default": "medium",
+          "description": "Acceptable risk level for modern features"
+        },
+        "baselineCopilot.excludePatterns": {
+          "type": "array",
+          "default": ["node_modules/**", "dist/**", "build/**"],
+          "description": "File patterns to exclude from analysis"
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "baselineCompatibility",
+          "name": "Browser Compatibility",
+          "when": "baselineCopilot.activated"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "baselinePanel",
+          "title": "Baseline Copilot",
+          "icon": "$(target)"
+        }
+      ]
+    },
+    "problemMatchers": [
+      {
+        "name": "baseline-copilot",
+        "owner": "baseline-copilot",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error)\\s+(.*)\\s+baseline-copilot$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "web-features": "^0.8.0",
+    "axios": "^1.6.0"
+  }
+}

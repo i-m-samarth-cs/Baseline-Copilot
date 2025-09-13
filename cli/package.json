@@ -1,0 +1,63 @@
+{
+  "name": "baseline-copilot-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for browser compatibility analysis using Baseline data",
+  "main": "dist/index.js",
+  "bin": {
+    "baseline-copilot": "./bin/baseline-copilot",
+    "bc": "./bin/baseline-copilot"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "baseline",
+    "browser-compatibility",
+    "web-features",
+    "cli",
+    "javascript",
+    "css",
+    "html",
+    "ci-cd"
+  ],
+  "author": "Baseline Copilot Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "glob": "^10.3.10",
+    "inquirer": "^9.2.12",
+    "ora": "^5.4.1",
+    "table": "^6.8.1",
+    "web-features": "^0.8.0",
+    "axios": "^1.6.0",
+    "fast-glob": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/inquirer": "^9.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baseline-copilot/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/baseline-copilot/cli/issues"
+  },
+  "homepage": "https://baseline-copilot.dev"
+}

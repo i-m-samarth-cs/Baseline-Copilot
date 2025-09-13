@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseline Copilot - Browser Compatibility Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff;">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-4xl font-bold" style="color: #ffffff !important; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">🎯 Baseline Copilot</h1>
+                    <p class="text-xl opacity-90 mt-2" style="color: #ffffff !important; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">Smart Browser Compatibility Analysis</p>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="clear-btn" class="glass px-6 py-3 rounded-lg font-semibold transition-colors" style="background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; color: #ffffff !important;">
+                        Clear All
+                    </button>
+                    <button id="export-btn" class="px-6 py-3 rounded-lg font-semibold transition-colors border-0" style="background: #ffffff !important; color: #764ba2 !important;">
+                        Export Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Code Input Panel -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+                        <h2 class="text-lg font-semibold">Code Analysis</h2>
+                        <div class="flex items-center space-x-4">
+                            <select id="language-select" class="bg-gray-700 text-white px-3 py-1 rounded">
+                                <option value="javascript">JavaScript</option>
+                                <option value="css">CSS</option>
+                                <option value="html">HTML</option>
+                            </select>
+                            <div id="analysis-status" class="text-sm opacity-75"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <textarea 
+                            id="code-input" 
+                            class="w-full h-64 p-4 border border-gray-300 rounded-lg font-mono text-sm"
+                            placeholder="Paste your code here for real-time compatibility analysis..."
+                        >// Modern JavaScript features - try modifying this code
+const dialog = document.querySelector('dialog');
+
+// Dialog API - check compatibility
+if (dialog?.showModal) {
+    dialog.showModal();
+} else {
+    // Fallback for older browsers
+    dialog.style.display = 'block';
+}
+
+// Array.at() method
+const items = ['apple', 'banana', 'cherry'];
+const lastItem = items.at(-1);
+
+// Optional chaining and nullish coalescing
+const user = data?.user?.profile?.name ?? 'Anonymous';
+
+// Temporal API (experimental)
+if (typeof Temporal !== 'undefined') {
+    const now = Temporal.Now.instant();
+    console.log(now.toString());
+}
+
+// Object.hasOwn() method
+if (Object.hasOwn(user, 'email')) {
+    console.log('User has email');
+}</textarea>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="text-sm text-gray-600">
+                                <span id="line-count">15 lines</span> • 
+                                <span id="char-count">612 characters</span> • 
+                                <span id="feature-count">0 features detected</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button 
+                                    id="load-sample" 
+                                    class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                                >
+                                    Load Sample
+                                </button>
+                                <button 
+                                    id="analyze-code" 
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                    🔍 Analyze Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div id="results-panel" class="mt-8 hidden">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden slide-up">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4">
+                            <h2 class="text-lg font-semibold">Compatibility Analysis Results</h2>
+                            <div class="text-sm opacity-90 mt-1" id="analysis-time"></div>
+                        </div>
+                        <div id="results-content" class="p-6">
+                            <!-- Results will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Real-time Stats -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">📊 Live Analysis</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Features Found:</span>
+                            <span id="sidebar-feature-count" class="font-bold text-blue-600">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Risk Level:</span>
+                            <span id="sidebar-risk-level" class="font-bold">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Compatibility Score:</span>
+                            <span id="sidebar-score" class="font-bold text-green-600">100/100</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="compatibility-bar" class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Browser Support Legend -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">🌐 Support Levels</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-green-500 rounded-full mr-3"></span>
+                            <div>
+                                <div class="font-medium text-green-700">Widely Available</div>
+                                <div class="text-xs text-gray-600">Safe to use everywhere</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-blue-500 rounded-full mr-3"></span>
+                            <div>
+                                <div class="font-medium text-blue-700">Newly Available</div>
+                                <div class="text-xs text-gray-600">Recently became baseline</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-yellow-500 rounded-full mr-3"></span>
+                            <div>
+                                <div class="font-medium text-yellow-700">Limited Support</div>
+                                <div class="text-xs text-gray-600">Use with caution</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-red-500 rounded-full mr-3"></span>
+                            <div>
+                                <div class="font-medium text-red-700">Unsupported</div>
+                                <div class="text-xs text-gray-600">Needs polyfill</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Database Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">🔍 Detection Database</h3>
+                    <div class="text-xs text-gray-600 space-y-1">
+                        <div>• Dialog API patterns</div>
+                        <div>• CSS Container Queries</div>
+                        <div>• Array.at() method</div>
+                        <div>• Optional chaining (?.)</div>
+                        <div>• Nullish coalescing (??)</div>
+                        <div>• Object.hasOwn()</div>
+                        <div>• Temporal API</div>
+                        <div>• CSS :has() selector</div>
+                        <div>• Fetch API</div>
+                        <div>• ES6 Modules</div>
+                        <div class="text-blue-600">...and 50+ more</div>
+                    </div>
+                </div>
+
+                <!-- Community Features Panel -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">🌟 Community Hub</h3>
+                    <div class="space-y-4">
+                        <!-- Feature Request Section -->
+                        <div class="border-b pb-4">
+                            <h4 class="font-medium text-gray-800 mb-2">Request New Feature</h4>
+                            <div class="flex gap-2">
+                                <input 
+                                    type="text" 
+                                    id="feature-request-input"
+                                    placeholder="Feature name..."
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm"
+                                >
+                                <button 
+                                    id="submit-request-btn"
+                                    class="bg-purple-600 text-white px-4 py-2 rounded text-sm hover:bg-purple-700 transition-colors"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Top Requested Features -->
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-3">Most Requested</h4>
+                            <div id="top-features" class="space-y-2">
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                    <div>
+                                        <div class="text-sm font-medium">CSS Anchor Positioning</div>
+                                        <div class="text-xs text-gray-500">234 votes</div>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <button class="text-green-600 hover:text-green-800 text-sm">👍</button>
+                                        <button class="text-red-600 hover:text-red-800 text-sm">👎</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                    <div>
+                                        <div class="text-sm font-medium">Array.prototype.groupBy()</div>
+                                        <div class="text-xs text-gray-500">187 votes</div>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <button class="text-green-600 hover:text-green-800 text-sm">👍</button>
+                                        <button class="text-red-600 hover:text-red-800 text-sm">👎</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                    <div>
+                                        <div class="text-sm font-medium">CSS View Transitions</div>
+                                        <div class="text-xs text-gray-500">156 votes</div>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <button class="text-green-600 hover:text-green-800 text-sm">👍</button>
+                                        <button class="text-red-600 hover:text-red-800 text-sm">👎</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full mt-3 text-sm text-blue-600 hover:text-blue-800">
+                                View All Requests →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Impact Panel -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">⚡ Performance Impact</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Bundle Size Impact:</span>
+                            <span id="bundle-size-impact" class="font-bold text-blue-600">0 KB</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Runtime Overhead:</span>
+                            <span id="runtime-overhead" class="font-bold text-green-600">Minimal</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="performance-bar" class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 95%"></div>
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            <div>💡 <strong>Tip:</strong> Consider lazy loading for features with high bundle impact</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Report Panel -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">📤 Share Results</h3>
+                    <div class="space-y-3">
+                        <button id="share-link-btn" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors text-sm">
+                            📋 Copy Share Link
+                        </button>
+                        <button id="share-twitter-btn" class="w-full bg-blue-400 text-white py-2 px-4 rounded hover:bg-blue-500 transition-colors text-sm">
+                            🐦 Share on Twitter
+                        </button>
+                        <button id="share-github-btn" class="w-full bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition-colors text-sm">
+                            🐙 Share on GitHub
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

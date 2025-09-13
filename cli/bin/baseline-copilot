@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+// Baseline Copilot CLI Entry Point
+const { BaselineCopilotCLI } = require('../dist/index.js');
+
+const cli = new BaselineCopilotCLI();
+cli.run().catch(error => {
+    console.error(`\x1b[31mFatal error: ${error}\x1b[0m`);
+    process.exit(1);
+});
